@@ -1,6 +1,7 @@
 
 using CVAnalyzer.Core.Entities;
 using CVAnalyzer.Core.Interfaces;
+using CVAnalyzer.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace CVAnalyzer.Infrastructure.Repositories
