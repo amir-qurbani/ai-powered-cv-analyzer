@@ -15,7 +15,7 @@ namespace CVAnalyzer.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<CV> GetCvByIdAsync(int id)
+        public async Task<CV?> GetCvByIdAsync(int id)
         {
             return await _context.Cvs.FindAsync(id);
         }
@@ -38,6 +38,17 @@ namespace CVAnalyzer.Infrastructure.Repositories
                 _context.Cvs.Remove(cv);
                 await _context.SaveChangesAsync();
             }
+        }
+        public async Task UpdateCvAsync(CV cv)
+        {
+            var existingCv = await _context.Cvs.FindAsync(cv.Id);
+            if (existingCv != null){
+                existingCv.Name = cv.Name;
+                existingCv.FileName = cv.FileName;
+
+                await _context.SaveChangesAsync();
+            }
+            
         }
     }
 }
