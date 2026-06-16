@@ -26,5 +26,13 @@ namespace CVAnalyzer.Application.Services
         {
             await _cvRepository.UpdateCvAsync(cv);
         }
+        public async Task UploadCvAsync(string fileName)
+        {
+            var cv = new CV
+            {
+                FileName = fileName
+            };
+            await _cvRepository.AddCvAsync(cv);
+        }
     }
 }

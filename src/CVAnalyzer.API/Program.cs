@@ -3,11 +3,16 @@ using CVAnalyzer.Infrastructure.Repositories;
 using CVAnalyzer.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using CVAnalyzer.Application.Services;
+using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Http;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.MapType<IFormFile>(() => new OpenApiSchema { Type = "string", Format = "binary" });
+});
 builder.Services.AddControllers();
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<ICvRepository, CvRepository>();

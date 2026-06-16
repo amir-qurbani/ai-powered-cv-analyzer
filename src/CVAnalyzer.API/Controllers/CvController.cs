@@ -5,6 +5,7 @@ using CVAnalyzer.Core.Interfaces;
 using CVAnalyzer.Infrastructure.Repositories;
 using Humanizer;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 
 namespace CVAnalyzer.API.Controllers
 {
@@ -43,6 +44,26 @@ namespace CVAnalyzer.API.Controllers
             await _cvService.UpdateCvAsync(cv);
             return Ok();
 
+        }
+        [HttpPost("upload")]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> UploadCv(IFormFile file)
+        {
+            var filePath = Path.Combine("Uploads", file.FileName);
+            using var stream = new FileStream(filePath, FileMode.Create);
+            await file.CopyToAsync(stream);
+            if (file == null || file.Length == 0)
+            {
+                return BadRequest("Please upload a PDF file.");
+            }
+
+            if (!file.FileName.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase))
+            {
+                return BadRequest("Only PDF files are allowed.");
+            }
+
+            await _cvService.UploadCvAsync(file.FileName);
+            return Ok();
         }
     }
 }
