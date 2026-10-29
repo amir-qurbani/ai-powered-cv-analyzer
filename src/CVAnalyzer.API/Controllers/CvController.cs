@@ -49,20 +49,29 @@ namespace CVAnalyzer.API.Controllers
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> UploadCv(IFormFile file)
         {
-            var filePath = Path.Combine("Uploads", file.FileName);
-            using var stream = new FileStream(filePath, FileMode.Create);
-            await file.CopyToAsync(stream);
+            // 1. Kontrollera att en fil har skickats
             if (file == null || file.Length == 0)
             {
-                return BadRequest("Please upload a PDF file.");
+                return BadRequest("Please upload a file.");
             }
 
+            // 2. Kontrollera filändelsen
             if (!file.FileName.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase))
             {
                 return BadRequest("Only PDF files are allowed.");
             }
 
+            // 3. Skapa sökvägen till filen
+            var filePath = Path.Combine("Uploads", Path.GetFileName(file.FileName));
+
+            // 4. Spara filen på datorn
+            using var stream = new FileStream(filePath, FileMode.Create);
+            await file.CopyToAsync(stream);
+
+            // 5. Spara filnamnet via Service
             await _cvService.UploadCvAsync(file.FileName);
+
+            // 6. Skicka svar till användaren
             return Ok();
         }
     }

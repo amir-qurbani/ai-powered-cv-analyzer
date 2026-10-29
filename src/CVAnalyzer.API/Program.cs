@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using CVAnalyzer.Application.Services;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Http;
+using CVAnalyzer.Infrastructure.Pdf;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +18,7 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<ICvRepository, CvRepository>();
 builder.Services.AddScoped<CvService>();
+builder.Services.AddScoped<IPdfTextReader, PdfTextReader>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

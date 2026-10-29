@@ -6,9 +6,11 @@ namespace CVAnalyzer.Application.Services
     public class CvService
     {
         private readonly ICvRepository _cvRepository;
-        public CvService (ICvRepository cvRepository)
+        private readonly IPdfTextReader _pdfTextReader;
+        public CvService (ICvRepository cvRepository, IPdfTextReader pdfTextReader)
         {
             _cvRepository = cvRepository;
+            _pdfTextReader = pdfTextReader;
         }
         public async Task<IEnumerable<CV>> GetAllCvAsync()
         {
